@@ -1,0 +1,3 @@
+[submodule "libraries/xkelib"]
+	path = libraries/xkelib
+	url = https://github.com/proferabg/xkelib.git

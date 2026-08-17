@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<xex>
+  <format>
+    <compressed/>
+  </format>
+
+  <mediatypes>
+    <allpackages/>
+  </mediatypes>
+
+  <gameregion>
+    <all/>
+  </gameregion>
+
+  <sysdll/>
+
+  <mfgmode mode = "aware"/>
+  <!-- 0x91D00000 does not work on XDK. -->
+  <baseaddr addr = "0x91B00000"/>
+
+</xex>

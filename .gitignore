@@ -1,0 +1,16 @@
+.DS_Store
+*.lib
+*.log
+*.user
+*.log
+*.TMP
+*.suo
+*.zip
+*.sdf
+
+vendor/
+.vs/
+Debug/
+Release/
+Release_LTCG/
+Build/
