@@ -341,7 +341,7 @@ namespace Hooks {
             DelayInterval.QuadPart = -10000;
 
             while (!UsbEnetIsPowerDownComplete() && DrainPasses < MaximumPassiveDrainPasses) {
-                KeDelayExecutionThread(PROC_USER, FALSE, &DelayInterval);
+                KeDelayExecutionThread(UserMode, FALSE, &DelayInterval);
                 ++DrainPasses;
             }
         }

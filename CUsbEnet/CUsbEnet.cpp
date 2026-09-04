@@ -587,7 +587,7 @@ NTSTATUS __fastcall CUsbEnet::PrepareForUserControlTransfer() {
 
 		TRAP_IRQL(PASSIVE_LEVEL);
 
-		KeWaitForSingleObject(&ControlEvent, Executive, PROC_IDLE, FALSE, nullptr);
+		KeWaitForSingleObject(&ControlEvent, Executive, KernelMode, FALSE, nullptr);
 
 		NicBaseTakeLock(this);
 		KeLeaveCriticalRegion();
@@ -638,7 +638,7 @@ VOID __fastcall CUsbEnet::WaitForUserControlTransferResult() {
 
 	TRAP_IRQL(PASSIVE_LEVEL);
 
-	KeWaitForSingleObject(&ControlEvent, Executive, PROC_IDLE, FALSE, NULL);
+	KeWaitForSingleObject(&ControlEvent, Executive, KernelMode, FALSE, NULL);
 
 	NicBaseTakeLock(this);
 
@@ -2078,7 +2078,7 @@ BOOL __fastcall CUsbEnet::NicDetachUser(CNicUser* User) {
 
 		LARGE_INTEGER DelayInterval;
 		DelayInterval.QuadPart = -10000;
-		KeDelayExecutionThread(PROC_USER, FALSE, &DelayInterval);
+		KeDelayExecutionThread(UserMode, FALSE, &DelayInterval);
 		NicBaseTakeLock(this);
 	}
 
@@ -2347,7 +2347,7 @@ VOID __fastcall CUsbEnet::Init(PUSBD_DEVICE_NODE DeviceNode, const PUSB_ENDPOINT
 	CloseRequest.Context = this;
 	CloseRequest.CompletionRoutine = (PUSBD_ASYNC_COMPLETION_ROUTINE)AsyncCompletionRoutineClose;
 
-	KeInitializeDpc(&ControlDpc, DpcControlSwitchProcsRoutine, this);
+	KeInitializeDpc(&ControlDpc, (PKDEFERRED_ROUTINE)DpcControlSwitchProcsRoutine, this);
 	ControlDpc.TargetNumber = 3;
 
 	memset(&ControlRequest, 0, sizeof(ControlRequest));
@@ -2502,7 +2502,7 @@ VOID __fastcall CUsbEnet::Init(PUSBD_DEVICE_NODE DeviceNode, const PUSB_ENDPOINT
 
 		Tracker.Transfer.Buffer = PhysicalBuffer + BufferOffset;
 
-		KeInitializeDpc(&Tracker.CompletionDpc, DpcBulkXmitSwitchProcsRoutine, this);
+		KeInitializeDpc(&Tracker.CompletionDpc, (PKDEFERRED_ROUTINE)DpcBulkXmitSwitchProcsRoutine, this);
 		Tracker.CompletionDpc.TargetNumber = 3;
 
 		TRAP_ASSERT(Tracker.FirstPacket == 0);
